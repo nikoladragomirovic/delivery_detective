@@ -5,17 +5,11 @@ def parse(data, service):
     parsed = []
     if isinstance(data, dict):
         if service == "glovo":
-            if "name" in data and "primeAvailable" in data:
-                if data["primeAvailable"]:
-                    parsed.append({"name": data["name"], "service": ["Glovo"], "free_delivery": ["Glovo"]})
-                else:
-                    parsed.append({"name": data["name"], "service": ["Glovo"], "free_delivery": []})
+            if "name" in data and "primeAvailable" in data and "slug" in data:
+                parsed.append({"name": data["name"], "services": [{"name": "Glovo", "link": "https://glovoapp.com/rs/en/novi-sad/"+data["slug"], "free_delivery": data["primeAvailable"]}]})
         elif service == "wolt":
-            if "name" in data and "show_wolt_plus" in data:
-                if data["show_wolt_plus"]:
-                    parsed.append({"name": data["name"], "service": ["Wolt"], "free_delivery": ["Wolt"]})
-                else:
-                    parsed.append({"name": data["name"], "service": ["Wolt"], "free_delivery": []})
+            if "name" in data and "show_wolt_plus" in data and "slug" in data:
+                parsed.append({"name": data["name"], "services": [{"name": "Wolt", "link": "https://wolt.com/en/srb/novi_sad/restaurant/"+data["slug"], "free_delivery": data["show_wolt_plus"]}]})
         for value in data.values():
             parsed.extend(parse(value, service))
     elif isinstance(data, list):
@@ -30,13 +24,12 @@ def merge(glovo_data, wolt_data):
     for item in combined_data:
         name = item['name'].lower()
         if name in merged_data:
-            merged_data[name]['service'].extend(item['service'])
-            merged_data[name]['free_delivery'].extend(item['free_delivery'])
+            existing_services = [service['name'] for service in merged_data[name]['services']]
+            for service in item['services']:
+                if service['name'] not in existing_services:
+                    merged_data[name]['services'].append(service)
         else:
             merged_data[name] = item
-
-    for name, data in merged_data.items():
-        data['service'] = list(set(data['service']))
 
     merged_list = list(merged_data.values())
 
@@ -57,7 +50,8 @@ glovo_headers = {
     'Glovo-Delivery-Location-Latitude': '45.26694579999999',
     'Glovo-Location-City-Code': 'QND',
     'Glovo-Delivery-Location-Timestamp': '1711636608028',
-    'Glovo-Delivery-Location-Accuracy': '0'
+    'Glovo-Delivery-Location-Accuracy': '0',
+    'Glovo-App-Platform': 'web'
 
 }
 
