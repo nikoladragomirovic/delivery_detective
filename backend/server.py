@@ -15,7 +15,7 @@ def check_session_token(username, session_token):
     db = client['dostava_detektiv']
     accounts_collection = db['accounts']
 
-    user = accounts_collection.find_one({'username': username, 'session_token': session_token})
+    user = accounts_collection.find_one({'username': username, 'session_tokens': session_token})
     return user is not None
 
 @app.route('/restaurants', methods=['GET'])
@@ -85,7 +85,7 @@ def login():
 
     if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
         session_token = generate_session_token()
-        accounts_collection.update_one({'username': username}, {'$push': {'session_token': session_token}})
+        accounts_collection.update_one({'username': username}, {'$push': {'session_tokens': session_token}})
 
         return jsonify({'message': 'Login successful', 'session_token': session_token}), 200
     else:
