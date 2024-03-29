@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request, abort
 from pymongo import MongoClient
+from flask_cors import CORS
 import bcrypt
 import secrets
 import string
 
 app = Flask(__name__)
+CORS(app, origins='*')
 
 def generate_session_token():
     alphabet = string.ascii_letters + string.digits
@@ -56,14 +58,16 @@ def register():
         return jsonify({'error': 'Username already exists'}), 409
 
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    session_token = generate_session_token()
 
     new_user = {
         'username': username,
-        'password': hashed_password.decode('utf-8')
+        'password': hashed_password.decode('utf-8'),
+        'session_tokens': [session_token]
     }
     accounts_collection.insert_one(new_user)
 
-    return jsonify({'message': 'User registered successfully'}), 201
+    return jsonify({'message': 'User registered successfully', 'session_token': session_token}), 201
 
 @app.route('/login', methods=['POST'])
 def login():
