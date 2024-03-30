@@ -20,7 +20,7 @@ def check_session_token(username, session_token):
     user = accounts_collection.find_one({'username': username, 'session_tokens': session_token})
     return user is not None
 
-@app.route('/restaurants', methods=['GET'])
+@app.route('/restaurants', methods=['POST'])
 def restaurants():
     username = request.form.get('username')
     session_token = request.form.get('session_token')
