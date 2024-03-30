@@ -106,11 +106,11 @@ const Page = ({ setLoggedIn }) => {
           className="border border-gray-500 font-light px-4 py-1 focus:outline-none rounded-3xl"
         />
       </div>
-      <div className="pt-20 grid grid-cols-3">
+      <div className="pt-20 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
         {filteredRestaurants.map((restaurant, index) => (
           <div
             key={index}
-            className="border border-gray-300 p-4 m-4 rounded-md"
+            className="border border-gray-300 p-4 m-4 rounded-3xl"
           >
             <h2 className="text-lg font-semibold">{restaurant.name}</h2>
             {restaurant.services.map((service, index) => (
