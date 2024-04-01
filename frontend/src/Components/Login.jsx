@@ -50,14 +50,14 @@ const Login = ({ setLoggedIn }) => {
         onSubmit={handleSubmit}
       >
         <input
-          className="px-4 py-2 text-xl focus:outline-none mb-8 caret-emerald-300 text-emerald-500 font-light border-emerald-500 placeholder:text-emerald-500 placeholder:font-light rounded-3xl"
+          className="px-4 py-2 text-xl focus:outline-none mb-8 caret-gray-300 text-gray-500 font-light border-gray-500 placeholder:text-gray-500 placeholder:font-light rounded-3xl"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
         />
         <input
-          className="px-4 py-2 text-xl focus:outline-none mb-4 caret-emerald-300 text-emerald-500 font-light border-emerald-500 placeholder:text-emerald-500 placeholder:font-light rounded-3xl"
+          className="px-4 py-2 text-xl focus:outline-none mb-4 caret-gray-300 text-gray-500 font-light border-gray-500 placeholder:text-gray-500 placeholder:font-light rounded-3xl"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -66,14 +66,14 @@ const Login = ({ setLoggedIn }) => {
         <p className="text-md text-rose-500 mb-4">{errorMap[status]}</p>
         <button
           type="submit"
-          className="py-1 px-4 text-emerald-500 border border-emerald-500 bg-emerald-50 font-extralight mb-4 text-xl rounded-3xl"
+          className="py-1 px-4 text-gray-500 border border-gray-500 bg-gray-100 font-extralight mb-4 text-xl rounded-3xl"
         >
           {register ? "Register" : "Login"}
         </button>
       </form>
       {register ? (
         <button
-          className="text-md font-light text-emerald-500 cursor-pointer underline"
+          className="text-md font-light text-gray-500 cursor-pointer underline"
           onClick={() => {
             setRegister(false);
             setStatus(0);
@@ -85,7 +85,7 @@ const Login = ({ setLoggedIn }) => {
         </button>
       ) : (
         <button
-          className="text-md font-light text-emerald-500 cursor-pointer underline"
+          className="text-md font-light text-gray-500 cursor-pointer underline"
           onClick={() => {
             setRegister(true);
             setStatus(0);

@@ -5,6 +5,23 @@ const Page = ({ setLoggedIn }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [settings, setSettings] = useState(false);
 
+  const serviceBackgroundColors = {
+    Wolt: "bg-[#009DE0]",
+    Glovo: "bg-[#FFC244]",
+    MisterD: "bg-[#BC2C3D]",
+  };
+
+  const serviceForegroundColors = {
+    Wolt: "text-white",
+    Glovo: "text-[#00A082]",
+    MisterD: "text-white",
+  };
+
+  const serviceBadges = {
+    Wolt: "/plus.svg",
+    Glovo: "/prime.svg",
+  };
+
   useEffect(() => {
     async function fetchRestaurants() {
       try {
@@ -70,8 +87,8 @@ const Page = ({ setLoggedIn }) => {
       }}
       className="w-full font-dosis min-h-screen flex flex-col items-center justify-start"
     >
-      <div className="fixed bg-white border-b rounded-b-2xl border-emerald-500 flex flex-row justify-around py-4 w-full">
-        <div className="py-1 relative px-4 cursor-pointer flex items-center justify-center text-emerald-500 border border-emerald-500 bg-emerald-50 font-extralight text-xl rounded-3xl">
+      <div className="fixed bg-white border-b rounded-b-2xl border-gray-500 flex flex-row justify-around py-4 w-full">
+        <div className="py-1 relative px-4 cursor-pointer flex items-center justify-center text-gray-500 border border-gray-500 bg-gray-100 font-extralight text-xl rounded-3xl">
           <p
             onClick={(e) => {
               e.stopPropagation();
@@ -89,11 +106,11 @@ const Page = ({ setLoggedIn }) => {
               onClick={(e) => {
                 handleLogOut(e);
               }}
-              className="py-1 px-4 text-emerald-500 border cursor-pointer border-emerald-500 bg-emerald-50 font-extralight text-xl rounded-3xl"
+              className="py-1 px-4 text-gray-500 border cursor-pointer border-gray-500 bg-gray-100 font-extralight text-xl rounded-3xl"
             >
               Logout
             </p>
-            <p className="py-1 px-4 text-emerald-500 border cursor-pointer border-emerald-500 bg-emerald-50 font-extralight text-xl rounded-3xl">
+            <p className="py-1 px-4 text-gray-500 border cursor-pointer border-gray-500 bg-gray-100 font-extralight text-xl rounded-3xl">
               Settings
             </p>
           </div>
@@ -103,22 +120,40 @@ const Page = ({ setLoggedIn }) => {
           placeholder="Search by name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-500 font-light px-4 py-1 focus:outline-none rounded-3xl"
+          className="border caret-gray-400 text-gray-500 border-gray-500 font-extralight text-lg px-4 py-1 focus:outline-none rounded-3xl"
         />
       </div>
       <div className="pt-20 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
         {filteredRestaurants.map((restaurant, index) => (
           <div
             key={index}
-            className="border border-gray-300 p-4 m-4 rounded-3xl"
+            className="border border-gray-500 p-5 m-4 bg-gray-50 rounded-3xl"
           >
-            <h2 className="text-lg font-semibold">{restaurant.name}</h2>
-            {restaurant.services.map((service, index) => (
-              <div key={index} className="flex flex-row space-x-2">
-                <p>{service.name}</p>
-                <p>{service.price}</p>
-              </div>
-            ))}
+            <h2 className="text-xl mb-2 text-gray-600 font-bold">
+              {restaurant.name}
+            </h2>
+            <div className="flex flex-row justify-start space-x-6 text-lg items-start">
+              {restaurant.services.map((service, index) => (
+                <a
+                  key={index}
+                  href={service.link}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="flex flex-col items-center justify-center"
+                >
+                  <p
+                    className={`${
+                      serviceBackgroundColors[service.name]
+                    } py-1 px-4 rounded-3xl font-semibold ${
+                      serviceForegroundColors[service.name]
+                    }`}
+                  >
+                    {service.name}
+                  </p>
+                  <p className="text-gray-600">{service.price}</p>
+                </a>
+              ))}
+            </div>
           </div>
         ))}
       </div>
