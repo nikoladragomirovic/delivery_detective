@@ -25,7 +25,17 @@ def parse(data, service):
                     "free_delivery": data["show_wolt_plus"]
                 }]
             })
-        
+        elif service == "misterd" and all(key in data for key in ("name", "slug", "originalDeliveryCost")):
+            parsed.append({
+                "name": data["name"],
+                "services": [{
+                    "name": "MisterD",
+                    "link": "https://misterd.rs/place/" + data["slug"],
+                    "price": "{:.2f}".format(float(data["originalDeliveryCost"])),
+                    "free_delivery": False
+                }]
+            })        
+
         for value in data.values():
             parsed.extend(parse(value, service))
             
@@ -68,7 +78,7 @@ def get_data():
             'lon': '19.8335496',
         },
         'headers': {
-            'Authorization': 'Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IjY1ZjM5MGY3MDAwMDAwMDAwMDAwMDAwMCIsInR5cCI6IngudXNlcitqd3QifQ.eyJhdWQiOlsiY29ycG9yYXRlLXBvcnRhbC1hcGkiLCJyZXR1cm5zLWFwaSIsImNvdXJpZXJjbGllbnQiLCJwYXltZW50cy10aXBzLXNlcnZpY2UiLCJvcmRlci10cmFja2luZyIsImNvbnN1bWVyLWFzc29ydG1lbnQiLCJzdXBwb3J0LWZ1bm5lbCIsInJlc3RhdXJhbnQtYXBpIiwidG9wdXAtc2VydmljZSIsImludGVncmF0aW9uLWNvbmZpZy1zZXJ2aWNlIiwid29sdGF1dGgiLCJjb252ZXJzZS13aWRnZXQtY29uc3VtZXIiLCJhZC1pbnNpZ2h0cyIsInBheW1lbnQtc2VydmljZSIsInZlbnVlLWNvbnRlbnQtYXBpIiwibG95YWx0eS1nYXRld2F5IiwibG95YWx0eS1wcm9ncmFtLWFwaSIsIm9yZGVyLXhwIl0sImlzcyI6IndvbHRhdXRoIiwianRpIjoiZDZhNDliNGNlZDUwMTFlZTliZmM5NmQ2MjgxMTM2ODMiLCJ1c2VyIjp7ImlkIjoiNWRlZTE0MTBjMTRkMjcyMDhkOGYyZTc4IiwibmFtZSI6eyJmaXJzdF9uYW1lIjoiTmlrb2xhIiwibGFzdF9uYW1lIjoiRHJhZ29taXJvdmljIn0sImVtYWlsIjoibmlrb2xhZHJhZ29taXJvdmljQGljbG91ZC5jb20iLCJyb2xlcyI6WyJ1c2VyIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV9udW1iZXJfdmVyaWZpZWQiOnRydWUsImNvdW50cnkiOiJTUkIiLCJsYW5ndWFnZSI6ImVuIiwicGVybWlzc2lvbnMiOltdLCJwaG9uZV9udW1iZXIiOiIrMzgxNjEyMTE4ODc3In0sImlhdCI6MTcxMTY2NDE5NCwiZXhwIjoxNzExNjY1OTk0LCJhbXIiOlsiZW1haWwiXX0.imQaTp-jgElAJFh0UxEFkHHYhq9yzr-siCvzlvEPrnXURDvFuwnv9f0Jr0p3pIq2U9XHB-ih61d802LppFn-BQ'
+            'Authorization': 'Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IjY1ZmNkOTg2MDAwMDAwMDAwMDAwMDAwMCIsInR5cCI6IngudXNlcitqd3QifQ.eyJhdWQiOlsiY29uc3VtZXItYXNzb3J0bWVudCIsImxveWFsdHktcHJvZ3JhbS1hcGkiLCJpbnRlZ3JhdGlvbi1jb25maWctc2VydmljZSIsInBheW1lbnRzLXRpcHMtc2VydmljZSIsImNvcnBvcmF0ZS1wb3J0YWwtYXBpIiwidG9wdXAtc2VydmljZSIsInBheW1lbnQtc2VydmljZSIsImFkLWluc2lnaHRzIiwib3JkZXIteHAiLCJyZXR1cm5zLWFwaSIsImxveWFsdHktZ2F0ZXdheSIsInJlc3RhdXJhbnQtYXBpIiwiY291cmllcmNsaWVudCIsInN1cHBvcnQtZnVubmVsIiwidmVudWUtY29udGVudC1hcGkiLCJ3b2x0YXV0aCIsIm9yZGVyLXRyYWNraW5nIiwiY29udmVyc2Utd2lkZ2V0LWNvbnN1bWVyIl0sImlzcyI6IndvbHRhdXRoIiwianRpIjoiN2FkOTRiZjZmMDFhMTFlZWIzYjIxMjY1YjgyMTQ0ZjMiLCJ1c2VyIjp7ImlkIjoiNWRlZTE0MTBjMTRkMjcyMDhkOGYyZTc4IiwibmFtZSI6eyJmaXJzdF9uYW1lIjoiTmlrb2xhIiwibGFzdF9uYW1lIjoiRHJhZ29taXJvdmljIn0sImVtYWlsIjoibmlrb2xhZHJhZ29taXJvdmljQGljbG91ZC5jb20iLCJyb2xlcyI6WyJ1c2VyIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV9udW1iZXJfdmVyaWZpZWQiOnRydWUsImNvdW50cnkiOiJTUkIiLCJsYW5ndWFnZSI6ImVuIiwicGVybWlzc2lvbnMiOltdLCJwaG9uZV9udW1iZXIiOiIrMzgxNjEyMTE4ODc3In0sImlhdCI6MTcxMTk3MDcwMSwiZXhwIjoxNzExOTcyNTAxLCJhbXIiOlsiZW1haWwiXX0.XdbRgESpRe1eTp7zqdbp6gYw1ez1H73T-tJQ9dABffANPMP8Do2wOe604-CA0Z7A2vgdDUqslT8JS4G6kAO9Vg'
         }
     }
 
@@ -84,16 +94,31 @@ def get_data():
         }
     }
 
+    misterd = {
+        'url': 'https://api.mrdonesi.com/api/public/store/explore-v3',
+        'params': {
+            'lat': '45.252317',
+            'lng': '19.8335496',
+        },
+        'headers': {
+            
+        }
+    }
+
     glovo_response = requests.get(glovo['url'], headers=glovo["headers"])
     glovo_data = glovo_response.json()
 
     wolt_response = requests.get(wolt["url"], params=wolt["params"], headers=wolt["headers"])
     wolt_data = wolt_response.json()
 
+    misterd_response = requests.get(misterd['url'], params=misterd['params'])
+    misterd_data = misterd_response.json()
+
     glovo_parsed_data = parse(glovo_data, "glovo")
     wolt_parsed_data = parse(wolt_data, "wolt")
+    misterd_parsed_data = parse(misterd_data, "misterd")
 
-    output_data = merge([glovo_parsed_data, wolt_parsed_data])
+    output_data = merge([glovo_parsed_data, wolt_parsed_data, misterd_parsed_data])
 
     return output_data
 
